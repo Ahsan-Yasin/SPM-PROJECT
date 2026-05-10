@@ -59,7 +59,12 @@ quickpos-landing/
 
 ## Running Tests
 
-### Run all tests with detailed output:
+### Simple Test Runner (Recommended for XAMPP):
+```bash
+php simple-test-runner.php
+```
+
+### Full PHPUnit Tests (requires zip extension):
 ```bash
 vendor/bin/phpunit --testdox tests/
 ```
@@ -73,6 +78,11 @@ composer test
 ```bash
 composer analyse
 ```
+
+### Testing Issues?
+If you encounter PHPUnit errors due to missing zip extension in XAMPP:
+1. Use `php simple-test-runner.php` instead
+2. Or enable zip extension in `C:\xampp\php\php.ini` by uncommenting `extension=zip`
 
 ## CI/CD Pipeline
 

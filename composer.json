@@ -1,5 +1,8 @@
 {
     "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
         "phpunit/phpunit": "^10",
         "phpstan/phpstan": "^1"
     },
@@ -14,13 +17,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit --testdox tests/",
-        "analyse": "phpstan analyse src --level=5"
-    },
-    "require-dev": {},
-    "config": {
-        "platform": {
-            "php": ">=8.0"
-        }
+        "test": "vendor/bin/phpunit --testdox tests/",
+        "analyse": "vendor/bin/phpstan analyse src --level=5"
     }
 }

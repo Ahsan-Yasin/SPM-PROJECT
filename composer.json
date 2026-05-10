@@ -1,0 +1,26 @@
+{
+    "require": {
+        "phpunit/phpunit": "^10",
+        "phpstan/phpstan": "^1"
+    },
+    "autoload": {
+        "psr-4": {
+            "QuickPOS\\Src\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "QuickPOS\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --testdox tests/",
+        "analyse": "phpstan analyse src --level=5"
+    },
+    "require-dev": {},
+    "config": {
+        "platform": {
+            "php": ">=8.0"
+        }
+    }
+}

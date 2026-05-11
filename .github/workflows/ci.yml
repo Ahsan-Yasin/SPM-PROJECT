@@ -1,0 +1,65 @@
+# Badge: https://github.com/YOUR_USERNAME/quickpos-landing/actions/workflows/ci.yml/badge.svg
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - "feature/*"
+      - "bugfix/*"
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, xml
+      - run: composer install --no-progress --prefer-dist
+      - run: find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+      - run: vendor/bin/phpstan analyse src --level=5 --no-progress
+
+  automated-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+      - run: composer install --no-progress --prefer-dist
+      - run: vendor/bin/phpunit --testdox tests/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: .
+        if: always()
+
+  validate-commits:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Validate commit message
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          if ! echo "$MSG" | grep -qE '\[KAN-[0-9]+\]'; then
+            echo "❌ Commit message missing Jira ID. Use format: [KAN-101] description"
+            exit 1
+          fi
+
+  build-summary:
+    needs: [code-quality, automated-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quickpos-build
+          path: .
+      - run: echo "✅ All checks passed. Build complete."
